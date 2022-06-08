@@ -10,6 +10,7 @@ class FlatAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at']
     list_editable = ['new_building']
     list_per_page = 10
+    list_filter = ['new_building']
 
 
 admin.site.register(Flat, FlatAdmin)
