@@ -6,6 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Flat(models.Model):
     owner = models.CharField('ФИО владельца', max_length=200)
+    # owner_id = models.ForeignKey('Owner', on_delete=models.CASCADE, related_name='flat_owners')
     owners_phonenumber = models.CharField('Номер владельца', max_length=20)
     created_at = models.DateTimeField(
         'Когда создано объявление',
@@ -55,6 +56,10 @@ class Flat(models.Model):
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
 
+    class Meta:
+        verbose_name = 'Объявление'
+        verbose_name_plural = 'Объявления'
+
 
 class Compliant(models.Model):
     user = models.ForeignKey(
@@ -73,3 +78,18 @@ class Compliant(models.Model):
 
     def __str__(self):
         return f'{self.user}, {self.flat}'
+
+    class Meta:
+        verbose_name = 'Жалоба на объявление'
+        verbose_name_plural = 'Жалобы на объявления'
+
+
+class Owner(models.Model):
+    user = models.CharField('ФИО владельца', max_length=200)
+    phone = models.CharField('Телефон владельца', max_length=20, blank=True)
+    pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True)
+    flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owner_flats')
+
+    class Meta:
+        verbose_name = 'Владелец'
+        verbose_name_plural = 'Владельцы'
