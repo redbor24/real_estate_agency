@@ -5,9 +5,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Flat(models.Model):
-    owner = models.CharField('ФИО владельца', max_length=200)
-    # owner_id = models.ForeignKey('Owner', on_delete=models.CASCADE, related_name='flat_owners')
-    owners_phonenumber = models.CharField('Номер владельца', max_length=20)
+    # owner = models.CharField('ФИО владельца', max_length=200)
+    # owner = models.ForeignKey('Owner', on_delete=models.CASCADE, related_name='flat_owners')
+    owned_by = models.ManyToManyField('Owner', through='Owner', related_name='owner_flats')
     created_at = models.DateTimeField(
         'Когда создано объявление',
         default=timezone.now,
@@ -51,7 +51,6 @@ class Flat(models.Model):
         db_index=True)
     new_building = models.BooleanField('Новостройка', null=True, db_index=True)
     like = models.ManyToManyField(User, verbose_name='Кто лайкнул')
-    owner_pure_phone = PhoneNumberField(verbose_name='Нормализованнцый номер владельца', blank=True)
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
@@ -85,14 +84,30 @@ class Compliant(models.Model):
 
 
 class Owner(models.Model):
-    user = models.CharField('ФИО владельца', max_length=200)
-    phone = models.CharField('Телефон владельца', max_length=20, blank=True)
+    owner = models.CharField('ФИО владельца', max_length=200)
+    phone = models.CharField('Телефон владельца', max_length=20)
     pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True)
     flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owner_flats')
 
     def __str__(self):
-        return f'{self.user}, {self.pure_phone if self.pure_phone else self.phone}'
+        return f'{self.owner}, {self.pure_phone if self.pure_phone else self.phone}'
 
     class Meta:
         verbose_name = 'Владелец'
         verbose_name_plural = 'Владельцы'
+
+'''----------------------------------------------------------------------------------'''
+class Person(models.Model):
+    name = models.CharField(max_length=128)
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Person, through='Membership')
+
+
+class Membership(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)

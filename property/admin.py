@@ -1,16 +1,20 @@
 from django.contrib import admin
 
 from .models import Flat, Compliant, Owner
-
+from .models import Membership, Person, Group
 
 LIST_PER_PAGE = 20
+
+
+class OwnersInline(admin.TabularInline):
+    model = Owner
 
 
 class FlatAdmin(admin.ModelAdmin):
     search_fields = ('town', 'address')
     list_display = ('town', 'town_district', 'new_building', 'address', 'floor', 'rooms_number',
                     'living_area', 'active', 'construction_year', 'price')
-    fields = ['owner', 'town', 'town_district',
+    fields = ['town', 'town_district',
               'new_building', 'address', 'floor', 'rooms_number', 'living_area',
               'active', 'construction_year', 'price']
     raw_id_fields = ('like',)
@@ -18,6 +22,7 @@ class FlatAdmin(admin.ModelAdmin):
     list_editable = ['new_building']
     list_per_page = LIST_PER_PAGE
     list_filter = ['new_building', 'rooms_number', 'has_balcony']
+    inlines = [OwnersInline]
 
 
 class CompliantAdmin(admin.ModelAdmin):
@@ -34,3 +39,20 @@ class OwnerAdmin(admin.ModelAdmin):
 admin.site.register(Flat, FlatAdmin)
 admin.site.register(Compliant, CompliantAdmin)
 admin.site.register(Owner, OwnerAdmin)
+
+
+class MembershipInline(admin.TabularInline):
+    model = Membership
+    extra = 1
+
+
+class PersonAdmin(admin.ModelAdmin):
+    inlines = (MembershipInline,)
+
+
+class GroupAdmin(admin.ModelAdmin):
+    inlines = (MembershipInline,)
+
+
+admin.site.register(Person, PersonAdmin)
+admin.site.register(Group, GroupAdmin)
