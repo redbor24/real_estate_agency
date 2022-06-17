@@ -90,6 +90,9 @@ class Owner(models.Model):
     pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True)
     flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owner_flats')
 
+    def __str__(self):
+        return f'{self.user}, {self.pure_phone if self.pure_phone else self.phone}'
+
     class Meta:
         verbose_name = 'Владелец'
         verbose_name_plural = 'Владельцы'
