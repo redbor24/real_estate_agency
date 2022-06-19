@@ -54,11 +54,12 @@ class FlatAdmin(admin.ModelAdmin):
 
 
 class CompliantAdmin(admin.ModelAdmin):
-    list_display = ('compliant_text', )
+    list_display = ('user', 'flat', 'compliant_text', )
     raw_id_fields = ('user', 'flat',)
 
 
 class OwnerAdmin(admin.ModelAdmin):
+    list_display = ('owner', 'phone', 'pure_phone', )
     list_per_page = LIST_PER_PAGE
     exclude = ('flat', )
     inlines = [FlatsInline]
