@@ -1,13 +1,40 @@
 from django.contrib import admin
 
 from .models import Flat, Compliant, Owner
-from .models import Membership, Person, Group
 
 LIST_PER_PAGE = 20
 
 
+class FlatsInline(admin.TabularInline):
+    model = Owner.flat.through
+    raw_id_fields = ('flat',)
+    verbose_name = 'Квартира'
+    verbose_name_plural = 'Квартиры'
+    extra = 0
+
+
+class CompliantsInline(admin.TabularInline):
+    model = Compliant
+    raw_id_fields = ('user', 'flat')
+    verbose_name = 'Жалоба'
+    verbose_name_plural = 'Жалобы'
+    extra = 0
+
+
 class OwnersInline(admin.TabularInline):
-    model = Owner
+    model = Owner.flat.through
+    raw_id_fields = ('owner',)
+    verbose_name = 'Владелец'
+    verbose_name_plural = 'Владельцы'
+    extra = 0
+
+
+class LikesInline(admin.TabularInline):
+    model = Flat.like.through
+    raw_id_fields = ('user',)
+    verbose_name = 'Кто лайкнул'
+    verbose_name_plural = 'Кто лайкнул'
+    extra = 0
 
 
 class FlatAdmin(admin.ModelAdmin):
@@ -22,37 +49,21 @@ class FlatAdmin(admin.ModelAdmin):
     list_editable = ['new_building']
     list_per_page = LIST_PER_PAGE
     list_filter = ['new_building', 'rooms_number', 'has_balcony']
-    inlines = [OwnersInline]
+    inlines = [OwnersInline, CompliantsInline, LikesInline]
+    exclude = ('owner',)
 
 
 class CompliantAdmin(admin.ModelAdmin):
-    list_display = ('user', 'flat', 'compliant_text')
-    raw_id_fields = ('flat',)
+    list_display = ('compliant_text', )
+    raw_id_fields = ('user', 'flat',)
 
 
 class OwnerAdmin(admin.ModelAdmin):
-    # list_display = ('user', 'phone', 'pure_phone')
-    raw_id_fields = ('flat',)
     list_per_page = LIST_PER_PAGE
+    exclude = ('flat', )
+    inlines = [FlatsInline]
 
 
 admin.site.register(Flat, FlatAdmin)
 admin.site.register(Compliant, CompliantAdmin)
 admin.site.register(Owner, OwnerAdmin)
-
-
-class MembershipInline(admin.TabularInline):
-    model = Membership
-    extra = 1
-
-
-class PersonAdmin(admin.ModelAdmin):
-    inlines = (MembershipInline,)
-
-
-class GroupAdmin(admin.ModelAdmin):
-    inlines = (MembershipInline,)
-
-
-admin.site.register(Person, PersonAdmin)
-admin.site.register(Group, GroupAdmin)
