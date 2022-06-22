@@ -7,7 +7,8 @@ def load_flat_owners(apps, schema_editor):
     Owner = apps.get_model('property', 'Owner')
     Flat = apps.get_model('property', 'Flat')
 
-    for flt in Flat.objects.all():
+    flat_set = Flat.objects.all()
+    for flt in flat_set.iterator():
         owner, created = Owner.objects.get_or_create(
             user=flt.owner,
             phone=flt.owners_phonenumber,
