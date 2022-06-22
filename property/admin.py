@@ -44,7 +44,6 @@ class FlatAdmin(admin.ModelAdmin):
     fields = ['town', 'town_district',
               'new_building', 'address', 'floor', 'rooms_number', 'living_area',
               'active', 'construction_year', 'price']
-    raw_id_fields = ('like',)
     readonly_fields = ['created_at']
     list_editable = ['new_building']
     list_per_page = LIST_PER_PAGE
