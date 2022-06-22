@@ -62,13 +62,13 @@ class Compliant(models.Model):
         User,
         verbose_name='Кто пожаловался',
         on_delete=models.DO_NOTHING,
-        related_name='owner_compliants'
+        related_name='compliants'
     )
     flat = models.ForeignKey(
         Flat,
         verbose_name='Объявление',
         on_delete=models.DO_NOTHING,
-        related_name='flat_compliants'
+        related_name='compliants'
     )
     compliant_text = models.TextField(verbose_name='Текст жалобы', blank=False)
 
@@ -84,7 +84,7 @@ class Owner(models.Model):
     owner = models.CharField('ФИО владельца', max_length=200)
     phone = models.CharField('Телефон владельца', max_length=20)
     pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True)
-    flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owner_flats', db_index=True)
+    flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owners', db_index=True)
 
     def __str__(self):
         return f'{self.owner}, {self.pure_phone if self.pure_phone else self.phone}'
