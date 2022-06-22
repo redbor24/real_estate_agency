@@ -81,9 +81,9 @@ class Compliant(models.Model):
 
 
 class Owner(models.Model):
-    owner = models.CharField('ФИО владельца', max_length=200)
-    phone = models.CharField('Телефон владельца', max_length=20)
-    pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True)
+    owner = models.CharField('ФИО владельца', max_length=200, db_index=True)
+    phone = models.CharField('Телефон владельца', max_length=20, db_index=True)
+    pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True, db_index=True)
     flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owners', db_index=True)
 
     def __str__(self):
