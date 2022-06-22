@@ -37,6 +37,7 @@ class LikesInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Flat)
 class FlatAdmin(admin.ModelAdmin):
     search_fields = ('town', 'address')
     list_display = ('town', 'town_district', 'new_building', 'address', 'floor', 'rooms_number',
@@ -52,18 +53,15 @@ class FlatAdmin(admin.ModelAdmin):
     exclude = ('owner',)
 
 
+@admin.register(Compliant)
 class CompliantAdmin(admin.ModelAdmin):
     list_display = ('user', 'flat', 'compliant_text', )
     raw_id_fields = ('user', 'flat',)
 
 
+@admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
     list_display = ('owner', 'phone', 'pure_phone', )
     list_per_page = LIST_PER_PAGE
     exclude = ('flat', )
     inlines = [FlatsInline]
-
-
-admin.site.register(Flat, FlatAdmin)
-admin.site.register(Compliant, CompliantAdmin)
-admin.site.register(Owner, OwnerAdmin)
