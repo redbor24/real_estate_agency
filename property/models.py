@@ -47,7 +47,7 @@ class Flat(models.Model):
         blank=True,
         db_index=True)
     new_building = models.BooleanField('Новостройка', null=True, db_index=True)
-    like = models.ManyToManyField(User, verbose_name='Кто лайкнул', related_name='flat_likes',  null=True)
+    like = models.ManyToManyField(User, verbose_name='Кто лайкнул', related_name='flat_likes', null=True)
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
@@ -70,7 +70,7 @@ class Compliant(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='compliants'
     )
-    compliant_text = models.TextField(verbose_name='Текст жалобы', blank=False)
+    text = models.TextField(verbose_name='Текст жалобы', blank=False)
 
     def __str__(self):
         return f'{self.user}, {self.flat}'

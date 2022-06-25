@@ -55,7 +55,7 @@ class FlatAdmin(admin.ModelAdmin):
 
 @admin.register(Compliant)
 class CompliantAdmin(admin.ModelAdmin):
-    list_display = ('user', 'flat', 'compliant_text', )
+    list_display = ('flat', 'user', 'text', )
     raw_id_fields = ('user', 'flat',)
 
 
