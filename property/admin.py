@@ -6,7 +6,7 @@ LIST_PER_PAGE = 20
 
 
 class FlatsInline(admin.TabularInline):
-    model = Owner.flat.through
+    model = Owner.flats.through
     raw_id_fields = ('flat',)
     verbose_name = 'Квартира'
     verbose_name_plural = 'Квартиры'
@@ -22,7 +22,7 @@ class CompliantsInline(admin.TabularInline):
 
 
 class OwnersInline(admin.TabularInline):
-    model = Owner.flat.through
+    model = Owner.flats.through
     raw_id_fields = ('owner',)
     verbose_name = 'Владелец'
     verbose_name_plural = 'Владельцы'
@@ -30,7 +30,7 @@ class OwnersInline(admin.TabularInline):
 
 
 class LikesInline(admin.TabularInline):
-    model = Flat.like.through
+    model = Flat.likes.through
     raw_id_fields = ('user',)
     verbose_name = 'Кто лайкнул'
     verbose_name_plural = 'Кто лайкнул'
@@ -63,5 +63,5 @@ class CompliantAdmin(admin.ModelAdmin):
 class OwnerAdmin(admin.ModelAdmin):
     list_display = ('owner', 'phone', 'pure_phone', )
     list_per_page = LIST_PER_PAGE
-    exclude = ('flat', )
+    exclude = ('flat', 'flats',)
     inlines = [FlatsInline]

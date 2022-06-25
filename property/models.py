@@ -47,7 +47,7 @@ class Flat(models.Model):
         blank=True,
         db_index=True)
     new_building = models.BooleanField('Новостройка', null=True, db_index=True)
-    like = models.ManyToManyField(User, verbose_name='Кто лайкнул', related_name='flat_likes', null=True)
+    likes = models.ManyToManyField(User, verbose_name='Кто поставил лайк', related_name='liked_flats', null=True)
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
@@ -84,7 +84,7 @@ class Owner(models.Model):
     owner = models.CharField('ФИО владельца', max_length=200, db_index=True)
     phone = models.CharField('Телефон владельца', max_length=20, db_index=True)
     pure_phone = PhoneNumberField(verbose_name='Нормализованный телефон владельца', blank=True, db_index=True)
-    flat = models.ManyToManyField(Flat, verbose_name='Квартира', related_name='owners', db_index=True)
+    flats = models.ManyToManyField(Flat, verbose_name='Квартиры', related_name='owners', db_index=True)
 
     def __str__(self):
         return f'{self.owner}, {self.pure_phone if self.pure_phone else self.phone}'
